@@ -5,4 +5,5 @@ edition = "2024"
 
 [dependencies]
 actix-web = "4.14.0"
+askama = "0.16.0"
 speculoos = "0.13.0"
