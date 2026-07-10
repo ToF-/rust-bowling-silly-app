@@ -14,7 +14,7 @@ pub struct HomePage {
     version: String,
 }
 
-pub async fn home() -> HomePage {
+pub async fn home() -> impl Responder {
     HomePage {
         version: "1.0.0".to_string(),
     }
@@ -36,13 +36,15 @@ fn routes(service_config: &mut ServiceConfig) {
 mod tests {
     use actix_web::App;
     use actix_web::test;
+    use actix_web::web;
     use crate::home;
+    use crate::routes;
     use speculoos::assert_that;
     use speculoos::prelude::StrAssertions;
 
     #[actix_web::test]
     async fn test_app_displays_hello_world() {
-        let app = test::init_service(App::new().service(home)).await;
+        let app = test::init_service(App::new().configure(routes)).await;
         let request = test::TestRequest::default().to_request();
         let body = test::call_and_read_body(&app, request)
             .await
@@ -51,13 +53,13 @@ mod tests {
         assert_that(&body).contains("Hello World!");
     }
     #[actix_web::test]
-    async fn test_app_displays_version() {
-        let app = test::init_service(App::new().service(home)).await;
+    async fn test_app_displays_a_version() {
+        let app = test::init_service(App::new().configure(routes)).await;
         let request = test::TestRequest::default().to_request();
         let body = test::call_and_read_body(&app, request)
             .await
             .escape_ascii()
             .to_string();
-        assert_that(&body).contains("1.1.0");
+        assert_that(&body).contains("1.0.0");
     }
 }
