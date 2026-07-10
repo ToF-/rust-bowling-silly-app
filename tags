@@ -9,3 +9,4 @@ home	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn home() 
 main	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> std::io::Result<()> {$/;"	f
 routes	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^fn routes(service_config: &mut ServiceConfig) {$/;"	f
 test_app_displays_hello_world	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_hello_world() {$/;"	f
+test_app_displays_version	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_version() {$/;"	f

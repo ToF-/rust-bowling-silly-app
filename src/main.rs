@@ -1,4 +1,5 @@
 use askama::Template;
+use askama_web::WebTemplate;
 use actix_web::App;
 use actix_web::HttpResponse;
 use actix_web::HttpServer;
@@ -7,7 +8,7 @@ use actix_web::get;
 use actix_web::web;
 use actix_web::web::ServiceConfig;
 
-#[derive(Template)]
+#[derive(Template, WebTemplate)]
 #[template(path = "home.html")]
 pub struct HomePage {
     version: String,
@@ -33,7 +34,6 @@ fn routes(service_config: &mut ServiceConfig) {
 
 #[cfg(test)]
 mod tests {
-    use crate::hello;
     use actix_web::App;
     use actix_web::test;
     use speculoos::assert_that;
@@ -41,12 +41,22 @@ mod tests {
 
     #[actix_web::test]
     async fn test_app_displays_hello_world() {
-        let app = test::init_service(App::new().service(hello)).await;
+        let app = test::init_service(App::new().service(home)).await;
         let request = test::TestRequest::default().to_request();
         let body = test::call_and_read_body(&app, request)
             .await
             .escape_ascii()
             .to_string();
         assert_that(&body).contains("Hello World!");
+    }
+    #[actix_web::test]
+    async fn test_app_displays_version() {
+        let app = test::init_service(App::new().service(home)).await;
+        let request = test::TestRequest::default().to_request();
+        let body = test::call_and_read_body(&app, request)
+            .await
+            .escape_ascii()
+            .to_string();
+        assert_that(&body).contains("1.1.0");
     }
 }
