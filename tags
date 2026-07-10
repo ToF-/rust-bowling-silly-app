@@ -4,5 +4,6 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-dummy_test	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    fn dummy_test() {$/;"	f
-main	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^fn main() {$/;"	f
+hello	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^async fn hello() -> impl Responder {$/;"	f
+main	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> std::io::Result<()> {$/;"	f
+test_app_displays_hello_world	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_hello_world() {$/;"	f
