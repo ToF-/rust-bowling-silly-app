@@ -36,6 +36,7 @@ fn routes(service_config: &mut ServiceConfig) {
 mod tests {
     use actix_web::App;
     use actix_web::test;
+    use crate::home;
     use speculoos::assert_that;
     use speculoos::prelude::StrAssertions;
 
