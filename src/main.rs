@@ -9,6 +9,7 @@ use actix_web::web::ServiceConfig;
 use askama::Template;
 use askama_web::WebTemplate;
 use serde::Deserialize;
+use serde::Serialize;
 use std::sync::Mutex;
 
 struct AppState {
@@ -28,7 +29,7 @@ pub async fn home(state: web::Data<AppState>) -> impl Responder {
     }
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize,Deserialize)]
 pub struct ChangeForm {
     action: String,
 }
@@ -77,6 +78,7 @@ mod tests {
     use crate::Mutex;
     use crate::home;
     use crate::routes;
+    use crate::ChangeForm;
     use actix_web::App;
     use actix_web::test;
     use actix_web::web;
@@ -118,7 +120,7 @@ mod tests {
         assert_that(&body).contains("4807");
     }
     #[actix_web::test]
-    async fn test_app_changes_the_counter() {
+    async fn test_app_increases_the_counter() {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(AppState {
@@ -129,6 +131,9 @@ mod tests {
         .await;
         let changeRequest = test::TestRequest::post()
             .uri("/change")
+            .set_form(ChangeForm {
+                action: "increase".to_string(),
+            })
             .send_request(&app)
             .await;
         let request = test::TestRequest::default().to_request();
@@ -137,5 +142,29 @@ mod tests {
             .escape_ascii()
             .to_string();
         assert_that(&body).contains("42");
+    }
+    #[actix_web::test]
+    async fn test_app_decreases_the_counter() {
+        let app = test::init_service(
+            App::new()
+                .app_data(web::Data::new(AppState {
+                    counter: Mutex::new(41),
+                }))
+                .configure(routes),
+        )
+        .await;
+        let changeRequest = test::TestRequest::post()
+            .uri("/change")
+            .set_form(ChangeForm {
+                action: "decrease".to_string(),
+            })
+            .send_request(&app)
+            .await;
+        let request = test::TestRequest::default().to_request();
+        let body = test::call_and_read_body(&app, request)
+            .await
+            .escape_ascii()
+            .to_string();
+        assert_that(&body).contains("40");
     }
 }
