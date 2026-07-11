@@ -8,6 +8,7 @@ use actix_web::web;
 use actix_web::web::ServiceConfig;
 use askama::Template;
 use askama_web::WebTemplate;
+use serde::Deserialize;
 use std::sync::Mutex;
 
 struct AppState {
@@ -27,9 +28,24 @@ pub async fn home(state: web::Data<AppState>) -> impl Responder {
     }
 }
 
-pub async fn change(state: web::Data<AppState>) -> impl Responder {
+#[derive(Deserialize)]
+pub struct ChangeForm {
+    action: String,
+}
+
+pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {
     let mut counter = state.counter.lock().unwrap();
-    *counter += 1;
+    match form.action.as_str() {
+        "increase" => {
+            *counter += 1;
+        }
+        "decrease" => {
+            if *counter > 0 {
+                *counter -= 1;
+            }
+        }
+        _ => {}
+    }
 
     HttpResponse::SeeOther()
         .insert_header((header::LOCATION, "/"))
@@ -58,9 +74,9 @@ fn routes(service_config: &mut ServiceConfig) {
 #[cfg(test)]
 mod tests {
     use crate::AppState;
+    use crate::Mutex;
     use crate::home;
     use crate::routes;
-    use crate::Mutex;
     use actix_web::App;
     use actix_web::test;
     use actix_web::web;

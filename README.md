@@ -1,2 +1,3 @@
 - [X] write an app that display "hello, world!" when requested
-- [ ] a button in the app creates a change in the data
+- [X] a button in the app creates a change in the data
+- [X] different buttons set state to different values 

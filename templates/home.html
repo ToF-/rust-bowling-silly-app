@@ -1,6 +1,7 @@
 {% extends "layout/base.html" %}
 {% block main %}
 <form method="post" action="/change">
-    <button type="submit">Change</button>
+    <button type="submit" name="action" value="increase">Increase</button>
+    <button type="submit" name="action" value="decrease">Decrease</button>
 </form>
 {% endblock %}

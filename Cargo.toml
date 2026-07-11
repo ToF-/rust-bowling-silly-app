@@ -6,5 +6,6 @@ edition = "2024"
 [dependencies]
 actix-web = "4.14.0"
 askama = "0.16.0"
-askama_web = { version = "0.16.0", features = ["actix-web-4"]}
+askama_web = { version = "0.16.0", features = ["actix-web-4"] }
+serde = { version = "1.0.228", features = ["derive"] }
 speculoos = "0.13.0"
