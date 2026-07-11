@@ -4,10 +4,12 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-AppState	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^struct AppState {$/;"	s
-HomePage	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct HomePage {$/;"	s
-home	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn home(data: web::Data<AppState>) -> impl Responder {$/;"	f
-main	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> std::io::Result<()> {$/;"	f
-routes	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^fn routes(service_config: &mut ServiceConfig) {$/;"	f
-test_app_displays_a_version	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_a_version() {$/;"	f
-test_app_displays_hello_world	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_hello_world() {$/;"	f
+AppState	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^struct AppState {$/;"	s
+HomePage	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct HomePage {$/;"	s
+change	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn change(state: web::Data<AppState>) -> impl Responder {$/;"	f
+home	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn home(state: web::Data<AppState>) -> impl Responder {$/;"	f
+main	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> std::io::Result<()> {$/;"	f
+routes	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^fn routes(service_config: &mut ServiceConfig) {$/;"	f
+test_app_changes_the_counter	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_changes_the_counter() {$/;"	f
+test_app_displays_a_counter	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_a_counter() {$/;"	f
+test_app_displays_hello_world	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_hello_world() {$/;"	f
