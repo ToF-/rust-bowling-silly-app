@@ -1,6 +1,6 @@
-<h1>Hello World!</h1>
-
-<p>{{ counter }}</p>
+{% extends "layout/base.html" %}
+{% block main %}
 <form method="post" action="/change">
     <button type="submit">Change</button>
 </form>
+{% endblock %}

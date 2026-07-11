@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="color-scheme" content="dark light" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta
+		name="description"
+		content="silly app to compute bowling score"
+	/>
+	<link rel="icon" type="image/png" href="/favicon.png" />
+	<title>Bowling Score</title>
+	<link rel="stylesheet" href="/style/base.css" />
+</head>
+<body>
+	{% block header %}
+		<header>
+            <h1>
+                Hello World!
+                {{ counter }}
+            </h1>
+        </header>
+	{% endblock %}
+	<main>
+		{% block main %}
+			<div class="centered">
+				{% block centered %}
+					<div class="big">
+						{% block big %}{% endblock %}
+					</div>
+				{% endblock %}
+			</div>
+		{% endblock %}
+	</main>
+</body>
+
+</html>
