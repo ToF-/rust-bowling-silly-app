@@ -90,6 +90,7 @@ mod tests {
     use actix_web::web;
     use speculoos::assert_that;
     use speculoos::prelude::StrAssertions;
+    use actix_web::dev::ServiceResponse;
 
     #[actix_web::test]
     async fn test_app_displays_the_word_score() {
@@ -149,8 +150,24 @@ mod tests {
             .to_string();
         assert_that(&body).contains("42");
     }
+
+    async fn check_changeRequestWith(app: &impl actix_web::dev::Service<actix_http::Request, Response = ServiceResponse, Error = actix_web::Error>, action: &str, expected: &str) -> () {
+        let change_request = test::TestRequest::post()
+            .uri("/change")
+            .set_form(ChangeForm {
+                action: "5".to_string(),
+            });
+        change_request.send_request(&app).await;
+        let request = test::TestRequest::default().to_request();
+        let body = test::call_and_read_body(&app, request)
+            .await
+            .escape_ascii()
+            .to_string();
+        assert_that(&body).contains(expected);
+    }
+
     #[actix_web::test]
-    async fn test_app_button_five_increases_the_score() {
+    async fn test_app_button_increases_the_score() {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(AppState {
@@ -159,18 +176,9 @@ mod tests {
                 .configure(routes),
         )
         .await;
-        let changeRequest = test::TestRequest::post()
-            .uri("/change")
-            .set_form(ChangeForm {
-                action: "5".to_string(),
-            })
-            .send_request(&app)
-            .await;
-        let request = test::TestRequest::default().to_request();
-        let body = test::call_and_read_body(&app, request)
-            .await
-            .escape_ascii()
-            .to_string();
-        assert_that(&body).contains("46");
+
+        check_changeRequestWith(&app, "5", "46");
+        check_changeRequestWith(&app, "3", "49");
+        check_changeRequestWith(&app, "2", "51");
     }
 }

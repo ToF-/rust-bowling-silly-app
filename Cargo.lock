@@ -1151,6 +1151,7 @@ name = "rust-bowling-silly-app"
 version = "0.1.0"
 dependencies = [
  "actix-files",
+ "actix-http",
  "actix-web",
  "askama",
  "askama_web",
