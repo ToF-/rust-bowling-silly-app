@@ -9,10 +9,9 @@ ChangeForm	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^
 HomePage	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct HomePage {$/;"	s
 change	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {$/;"	f
 home	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn home(state: web::Data<AppState>) -> impl Responder {$/;"	f
-index	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^async fn index() -> impl Responder {$/;"	f
 main	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> std::io::Result<()> {$/;"	f
 routes	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^fn routes(service_config: &mut ServiceConfig) {$/;"	f
-test_app_decreases_the_counter	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_decreases_the_counter() {$/;"	f
-test_app_displays_a_counter	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_a_counter() {$/;"	f
-test_app_displays_hello_world	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_hello_world() {$/;"	f
-test_app_increases_the_counter	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_increases_the_counter() {$/;"	f
+test_app_button_1_increases_the_score	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_button_1_increases_the_score() {$/;"	f
+test_app_button_five_increases_the_score	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_button_five_increases_the_score() {$/;"	f
+test_app_displays_a_score	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_a_score() {$/;"	f
+test_app_displays_the_word_score	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_the_word_score() {$/;"	f

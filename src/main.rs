@@ -14,19 +14,19 @@ use serde::Serialize;
 use std::sync::Mutex;
 
 struct AppState {
-    counter: Mutex<usize>,
+    score: Mutex<usize>,
 }
 
 #[derive(Template, WebTemplate)]
 #[template(path = "home.html")]
 pub struct HomePage {
-    counter: String,
+    score: String,
 }
 
 pub async fn home(state: web::Data<AppState>) -> impl Responder {
-    let counter: usize = *state.counter.lock().unwrap();
+    let score: usize = *state.score.lock().unwrap();
     HomePage {
-        counter: counter.to_string(),
+        score: score.to_string(),
     }
 }
 
@@ -36,17 +36,17 @@ pub struct ChangeForm {
 }
 
 pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {
-    let mut counter = state.counter.lock().unwrap();
+    let mut score = state.score.lock().unwrap();
     match form.action.as_str() {
         "/" => {
-            *counter += 10;
+            *score += 10;
         }
         "X" => {
-            *counter += 10;
+            *score += 10;
         }
         "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" => {
             let increment: usize = form.action.as_str().parse().unwrap();
-            *counter += increment
+            *score += increment
         }
         _ => {}
     }
@@ -56,18 +56,13 @@ pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> 
         .finish()
 }
 
-#[get("/")]
-async fn index() -> impl Responder {
-    "Hello World!"
-}
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
-            .service(Files::new("/static", "static").use_hidden_files())
+            .service(Files::new("/static", "static"))
             .app_data(web::Data::new(AppState {
-                counter: Mutex::new(0),
+                score: Mutex::new(0),
             }))
             .configure(routes)
     })
@@ -95,11 +90,11 @@ mod tests {
     use speculoos::prelude::StrAssertions;
 
     #[actix_web::test]
-    async fn test_app_displays_hello_world() {
+    async fn test_app_displays_the_word_score() {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(AppState {
-                    counter: Mutex::new(0),
+                    score: Mutex::new(0),
                 }))
                 .configure(routes),
         )
@@ -109,14 +104,14 @@ mod tests {
             .await
             .escape_ascii()
             .to_string();
-        assert_that(&body).contains("Bowling Score");
+        assert_that(&body).contains("score");
     }
     #[actix_web::test]
-    async fn test_app_displays_a_counter() {
+    async fn test_app_displays_a_score() {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(AppState {
-                    counter: Mutex::new(4807),
+                    score: Mutex::new(4807),
                 }))
                 .configure(routes),
         )
@@ -129,11 +124,11 @@ mod tests {
         assert_that(&body).contains("4807");
     }
     #[actix_web::test]
-    async fn test_app_increases_the_counter() {
+    async fn test_app_button_1_increases_the_score() {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(AppState {
-                    counter: Mutex::new(41),
+                    score: Mutex::new(41),
                 }))
                 .configure(routes),
         )
@@ -141,7 +136,7 @@ mod tests {
         let changeRequest = test::TestRequest::post()
             .uri("/change")
             .set_form(ChangeForm {
-                action: "increase".to_string(),
+                action: "1".to_string(),
             })
             .send_request(&app)
             .await;
@@ -153,11 +148,11 @@ mod tests {
         assert_that(&body).contains("42");
     }
     #[actix_web::test]
-    async fn test_app_decreases_the_counter() {
+    async fn test_app_button_five_increases_the_score() {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(AppState {
-                    counter: Mutex::new(41),
+                    score: Mutex::new(41),
                 }))
                 .configure(routes),
         )
@@ -165,7 +160,7 @@ mod tests {
         let changeRequest = test::TestRequest::post()
             .uri("/change")
             .set_form(ChangeForm {
-                action: "decrease".to_string(),
+                action: "5".to_string(),
             })
             .send_request(&app)
             .await;
@@ -174,6 +169,6 @@ mod tests {
             .await
             .escape_ascii()
             .to_string();
-        assert_that(&body).contains("40");
+        assert_that(&body).contains("46");
     }
 }
