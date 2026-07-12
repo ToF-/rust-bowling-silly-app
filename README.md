@@ -1,3 +1,4 @@
 - [X] write an app that display "hello, world!" when requested
 - [X] a button in the app creates a change in the data
 - [X] different buttons set state to different values 
+- [ ] 12 buttons for entering bowling rolls

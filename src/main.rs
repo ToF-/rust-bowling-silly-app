@@ -1,3 +1,4 @@
+use actix_files::Files;
 use actix_web::App;
 use actix_web::HttpResponse;
 use actix_web::HttpServer;
@@ -57,6 +58,7 @@ pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> 
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
+            .service(Files::new("/", "./static").use_hidden_files())
             .app_data(web::Data::new(AppState {
                 counter: Mutex::new(0),
             }))
