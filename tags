@@ -11,6 +11,7 @@ HomePage	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct HomeP
 change	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {$/;"	f
 check_changeRequestWith	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    fn check_changeRequestWith(app: &App<impl ServiceFactory<ServiceRequest, Response = ServiceResponse<impl MessageBody>, Config = (), InitError = (), Error = actix_web::Error>>, action: &str, expected: &str) -> () {$/;"	f
 home	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn home(state: web::Data<AppState>) -> impl Responder {$/;"	f
+init_app	/Users/tof/Coding/rust-bowling-silly-app/src/test_fixtures/app.rs	/^pub fn init_app() -> App<$/;"	f
 init_game_puts_score_to_zero	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn init_game_puts_score_to_zero() {$/;"	f
 main	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> std::io::Result<()> {$/;"	f
 my_app	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn my_app(state: AppState) -> App<$/;"	f
