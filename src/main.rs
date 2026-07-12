@@ -90,6 +90,14 @@ mod tests {
     use speculoos::assert_that;
     use speculoos::prelude::StrAssertions;
 
+    use actix_http::body::MessageBody;
+    use actix_web::dev::ServiceFactory;
+    use actix_web::dev::ServiceRequest;
+use actix_web::dev::Service;
+use actix_http::Request;
+
+    use actix_web::dev::ServiceResponse;
+    use actix_web::Error;
     use crate::AppState;
     use crate::ChangeForm;
     use crate::Mutex;
@@ -127,28 +135,36 @@ use crate::routes;
             .to_string();
         assert_that(&body).contains("0");
     }
-    #[actix_web::test]
-    async fn test_app_button_1_increases_the_score() {
-        let app = test::init_service(
-            App::new()
-                .app_data(web::Data::new(AppState {
-                    game: Mutex::new(Game::new()),
-                }))
-                .configure(routes),
-        )
-        .await;
-        let _change_request = test::TestRequest::post()
+
+async fn body_after_action<T: Service<Request, Response=ServiceResponse::<impl MessageBody>, Error = Error>>(service: T,
+            action: &str) -> String {
+        test::TestRequest::post()
             .uri("/change")
             .set_form(ChangeForm {
-                action: "1".to_string(),
+                action: action.to_string()
             })
-            .send_request(&app)
+            .send_request(&service)
             .await;
         let request = test::TestRequest::default().to_request();
-        let body = test::call_and_read_body(&app, request)
+        let body = test::call_and_read_body(&service, request)
             .await
             .escape_ascii()
             .to_string();
-        assert_that(&body).contains("1");
+        body
+    }
+    #[actix_web::test]
+    async fn test_buttons_increase_the_score() {
+        let state = AppState {
+            game: Mutex::new(Game::new()),
+        };
+        let service = test::init_service(init_app(state)).await;
+        let body = &body_after_action(&service, "1").await;
+        assert_that(body).contains("1");
+        let body = &body_after_action(&service, "3").await;
+        assert_that(body).contains("4");
+        let body = &body_after_action(&service, "5").await;
+        assert_that(body).contains("9");
+        let body = &body_after_action(&service, "3").await;
+        assert_that(body).contains("12");
     }
 }
