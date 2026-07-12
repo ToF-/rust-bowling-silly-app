@@ -54,11 +54,16 @@ pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> 
         .finish()
 }
 
+#[get("/")]
+async fn index() -> impl Responder {
+    "Hello World!"
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
-            .service(Files::new("/", "./static").use_hidden_files())
+            .service(Files::new("/static", "static").use_hidden_files())
             .app_data(web::Data::new(AppState {
                 counter: Mutex::new(0),
             }))

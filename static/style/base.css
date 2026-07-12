@@ -18,13 +18,13 @@ p {
 
 .score {
     display: grid;
-    grid-template-columns: repeat(3, 80px);
+    grid-template-columns: repeat(3, 60px);
     gap: 10px;
     justify-content: center;
 }
 
 .score button {
-    height: 60px;
+    height: 40px;
     font-size: 1.2rem;
     cursor: pointer;
 }

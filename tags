@@ -4,14 +4,15 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-AppState	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^struct AppState {$/;"	s
-ChangeForm	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct ChangeForm {$/;"	s
-HomePage	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct HomePage {$/;"	s
-change	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {$/;"	f
-home	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn home(state: web::Data<AppState>) -> impl Responder {$/;"	f
-main	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> std::io::Result<()> {$/;"	f
-routes	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^fn routes(service_config: &mut ServiceConfig) {$/;"	f
-test_app_decreases_the_counter	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_decreases_the_counter() {$/;"	f
-test_app_displays_a_counter	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_a_counter() {$/;"	f
-test_app_displays_hello_world	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_hello_world() {$/;"	f
-test_app_increases_the_counter	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_increases_the_counter() {$/;"	f
+AppState	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^struct AppState {$/;"	s
+ChangeForm	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct ChangeForm {$/;"	s
+HomePage	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct HomePage {$/;"	s
+change	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {$/;"	f
+home	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^pub async fn home(state: web::Data<AppState>) -> impl Responder {$/;"	f
+index	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^async fn index() -> impl Responder {$/;"	f
+main	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> std::io::Result<()> {$/;"	f
+routes	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^fn routes(service_config: &mut ServiceConfig) {$/;"	f
+test_app_decreases_the_counter	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_decreases_the_counter() {$/;"	f
+test_app_displays_a_counter	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_a_counter() {$/;"	f
+test_app_displays_hello_world	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_hello_world() {$/;"	f
+test_app_increases_the_counter	/Users/christophethibaut/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_increases_the_counter() {$/;"	f
