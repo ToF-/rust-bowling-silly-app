@@ -13,6 +13,8 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::sync::Mutex;
 
+mod bowling;
+
 struct AppState {
     score: Mutex<usize>,
 }
