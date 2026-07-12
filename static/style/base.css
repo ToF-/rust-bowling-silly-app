@@ -16,6 +16,12 @@ p {
     margin-bottom: 1rem;
 }
 
+.centered {
+    display: flex;
+    justify-content: center; /* Horizontal */
+    align-items: center;     /* Vertical */
+}
+
 .score {
     display: grid;
     grid-template-columns: repeat(3, 60px);

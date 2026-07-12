@@ -38,13 +38,15 @@ pub struct ChangeForm {
 pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {
     let mut counter = state.counter.lock().unwrap();
     match form.action.as_str() {
-        "increase" => {
-            *counter += 1;
+        "/" => {
+            *counter += 10;
         }
-        "decrease" => {
-            if *counter > 0 {
-                *counter -= 1;
-            }
+        "X" => {
+            *counter += 10;
+        }
+        "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" => {
+            let increment: usize = form.action.as_str().parse().unwrap();
+            *counter += increment
         }
         _ => {}
     }
@@ -107,7 +109,7 @@ mod tests {
             .await
             .escape_ascii()
             .to_string();
-        assert_that(&body).contains("Hello World!");
+        assert_that(&body).contains("Bowling Score");
     }
     #[actix_web::test]
     async fn test_app_displays_a_counter() {
