@@ -1,4 +1,3 @@
-
 use actix_web::App;
 use actix_web::Error;
 use actix_web::body::MessageBody;
@@ -7,15 +6,13 @@ use actix_web::dev::ServiceRequest;
 use actix_web::dev::ServiceResponse;
 use actix_web::middleware::Logger;
 use actix_web::web;
+
+use crate::AppState;
 use crate::routes;
 
-pub(crate) fn app(config: &mut web::ServiceConfig, data: AppData) {
-    config
-        .app_data(data)
-        .configure(routes);
-}
-
-pub fn init_app() -> App<
+pub(crate) fn init_app(
+    data: AppState,
+) -> App<
     impl ServiceFactory<
         ServiceRequest,
         Response = ServiceResponse<impl MessageBody>,
@@ -24,5 +21,8 @@ pub fn init_app() -> App<
         Error = Error,
     >,
 > {
-    App::new().wrap(Logger::default()).configure(app)
+    App::new()
+        .wrap(Logger::default())
+        .app_data(web::Data::new(data))
+        .configure(routes)
 }

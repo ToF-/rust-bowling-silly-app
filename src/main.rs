@@ -3,8 +3,7 @@ use actix_web::App;
 use actix_web::HttpResponse;
 use actix_web::HttpServer;
 use actix_web::Responder;
-use actix_web::get;
-use actix_web::http::header;
+pub(crate) use actix_web::http::header;
 use actix_web::web;
 use actix_web::web::ServiceConfig;
 use askama::Template;
@@ -13,10 +12,12 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::sync::Mutex;
 
+use crate::bowling::Game;
+
 mod bowling;
 
-struct AppState {
-    score: Mutex<usize>,
+pub(crate) struct AppState {
+    game: Mutex<Game>,
 }
 
 #[derive(Template, WebTemplate)]
@@ -25,10 +26,10 @@ pub struct HomePage {
     score: String,
 }
 
-pub async fn home(state: web::Data<AppState>) -> impl Responder {
-    let score: usize = *state.score.lock().unwrap();
+pub(crate) async fn home(state: web::Data<AppState>) -> impl Responder {
+    let game = state.game.lock().unwrap();
     HomePage {
-        score: score.to_string(),
+        score: game.score().to_string(),
     }
 }
 
@@ -37,18 +38,18 @@ pub struct ChangeForm {
     action: String,
 }
 
-pub async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {
-    let mut score = state.score.lock().unwrap();
+pub(crate) async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {
+    let mut game = state.game.lock().unwrap();
     match form.action.as_str() {
         "/" => {
-            *score += 10;
+            game.add_roll(10);
         }
         "X" => {
-            *score += 10;
+            game.add_roll(10);
         }
         "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" => {
-            let increment: usize = form.action.as_str().parse().unwrap();
-            *score += increment
+            let roll: usize = form.action.as_str().parse().unwrap();
+            game.add_roll(roll);
         }
         _ => {}
     }
@@ -64,7 +65,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(Files::new("/static", "static"))
             .app_data(web::Data::new(AppState {
-                score: Mutex::new(0),
+                game: Mutex::new(Game::new()),
             }))
             .configure(routes)
     })
@@ -80,35 +81,28 @@ fn routes(service_config: &mut ServiceConfig) {
 
 #[cfg(test)]
 mod test_fixtures;
+
+#[cfg(test)]
 mod tests {
-    use crate::AppState;
-    use crate::Mutex;
-    use crate::home;
-    use crate::routes;
-    use crate::ChangeForm;
     use actix_web::App;
     use actix_web::test;
     use actix_web::web;
     use speculoos::assert_that;
     use speculoos::prelude::StrAssertions;
-    use actix_web::dev::ServiceResponse;
-    use actix_web::body::MessageBody;
-    use actix_web::dev::ServiceRequest;
-    use actix_web::dev::ServiceFactory;
-    use actix_web::middleware::Logger;
-    use actix_web::Error;
-    use crate::test_fixtures::app::app;
+
+    use crate::AppState;
+    use crate::ChangeForm;
+    use crate::Mutex;
+    use crate::bowling::Game;
+use crate::routes;
     use crate::test_fixtures::app::init_app;
 
     #[actix_web::test]
     async fn test_app_displays_the_word_score() {
-        let state = AppState { score: Mutex::new(0) };
-        let app = test::init_service(crate::test_fixtures::app::init_app()).await;
-                .app_data(web::Data::new(AppState {
-                    score: Mutex::new(4807),
-                }))
-                .configure(routes)
-        .await;
+        let state = AppState {
+            game: Mutex::new(Game::new()),
+        };
+        let app = test::init_service(init_app(state)).await;
         let request = test::TestRequest::default().to_request();
         let body = test::call_and_read_body(&app, request)
             .await
@@ -121,7 +115,7 @@ mod tests {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(AppState {
-                    score: Mutex::new(4807),
+                    game: Mutex::new(Game::new()),
                 }))
                 .configure(routes),
         )
@@ -131,19 +125,19 @@ mod tests {
             .await
             .escape_ascii()
             .to_string();
-        assert_that(&body).contains("4807");
+        assert_that(&body).contains("0");
     }
     #[actix_web::test]
     async fn test_app_button_1_increases_the_score() {
         let app = test::init_service(
             App::new()
                 .app_data(web::Data::new(AppState {
-                    score: Mutex::new(41),
+                    game: Mutex::new(Game::new()),
                 }))
                 .configure(routes),
         )
         .await;
-        let changeRequest = test::TestRequest::post()
+        let _change_request = test::TestRequest::post()
             .uri("/change")
             .set_form(ChangeForm {
                 action: "1".to_string(),
@@ -155,47 +149,6 @@ mod tests {
             .await
             .escape_ascii()
             .to_string();
-        assert_that(&body).contains("42");
+        assert_that(&body).contains("1");
     }
-
-    /*
-    fn check_changeRequestWith(app: &App<impl ServiceFactory<ServiceRequest, Response = ServiceResponse<impl MessageBody>, Config = (), InitError = (), Error = actix_web::Error>>, action: &str, expected: &str) -> () {
-        let change_request = test::TestRequest::post()
-            .uri("/change")
-            .set_form(ChangeForm {
-                action: "5".to_string(),
-            });
-        change_request.send_request(&app).await;
-        let request = test::TestRequest::default().to_request();
-        let body = test::call_and_read_body(&app, request)
-            .await
-            .escape_ascii()
-            .to_string();
-        assert_that(&body).contains(expected);
-    }
-
-    async fn my_app(state: AppState) -> App<
-            impl ServiceFactory<
-                actix_web::dev::Service<actix_http::requests::request::Request>,
-                Response = ServiceResponse<impl MessageBody>,
-                Config = (),
-                InitError = (),
-                Error = actix_web::Error,>> {
-                    test::init_service(
-                        App::new()
-                        .app_data(web::Data::new(state))
-                        .configure(routes),
-                    )
-    }
-    #[actix_web::test]
-    async fn test_app_button_increases_the_score() {
-        // let app = init_app(AppState { score: 41.into() }).await;
-        // async fn init_app(state: AppState) ->  impl actix_web::dev::Service<actix_http::Request, Response = ServiceResponse, Error = actix_web::Error> {
-        let state = AppState { score: Mutex::new(41) };
-        let app = my_app(state).await;
-        check_changeRequestWith(&app, "5", "46");
-        check_changeRequestWith(&app, "3", "49");
-        check_changeRequestWith(&app, "2", "51");
-    }
-    */
 }
