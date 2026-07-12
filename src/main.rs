@@ -91,6 +91,9 @@ mod tests {
     use speculoos::assert_that;
     use speculoos::prelude::StrAssertions;
     use actix_web::dev::ServiceResponse;
+    use actix_web::body::MessageBody;
+    use actix_web::dev::ServiceRequest;
+    use actix_web::dev::ServiceFactory;
 
     #[actix_web::test]
     async fn test_app_displays_the_word_score() {
@@ -151,7 +154,7 @@ mod tests {
         assert_that(&body).contains("42");
     }
 
-    async fn check_changeRequestWith(app: &impl actix_web::dev::Service<actix_http::Request, Response = ServiceResponse, Error = actix_web::Error>, action: &str, expected: &str) -> () {
+    fn check_changeRequestWith(app: &App<impl ServiceFactory<ServiceRequest, Response = ServiceResponse<impl MessageBody>, Config = (), InitError = (), Error = actix_web::Error>>, action: &str, expected: &str) -> () {
         let change_request = test::TestRequest::post()
             .uri("/change")
             .set_form(ChangeForm {
@@ -166,17 +169,25 @@ mod tests {
         assert_that(&body).contains(expected);
     }
 
+    async fn my_app(state: AppState) -> App<
+            impl ServiceFactory<
+                actix_web::dev::Service<actix_http::requests::request::Request>,
+                Response = ServiceResponse<impl MessageBody>,
+                Config = (),
+                InitError = (),
+                Error = actix_web::Error,>> {
+                    test::init_service(
+                        App::new()
+                        .app_data(web::Data::new(state))
+                        .configure(routes),
+                    )
+    }
     #[actix_web::test]
     async fn test_app_button_increases_the_score() {
-        let app = test::init_service(
-            App::new()
-                .app_data(web::Data::new(AppState {
-                    score: Mutex::new(41),
-                }))
-                .configure(routes),
-        )
-        .await;
-
+        // let app = init_app(AppState { score: 41.into() }).await;
+        // async fn init_app(state: AppState) ->  impl actix_web::dev::Service<actix_http::Request, Response = ServiceResponse, Error = actix_web::Error> {
+        let state = AppState { score: Mutex::new(41) };
+        let app = my_app(state).await;
         check_changeRequestWith(&app, "5", "46");
         check_changeRequestWith(&app, "3", "49");
         check_changeRequestWith(&app, "2", "51");
