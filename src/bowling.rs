@@ -62,6 +62,14 @@ impl Game {
             _ => false
         }
     }
+
+    pub fn initialize(&mut self) {
+        self.score = 0;
+        self.bonus = 0;
+        self.next_bonus = 0;
+        self.frames = 0;
+        self.last_roll = None;
+    }
 }
 
 #[cfg(test)]
@@ -136,5 +144,14 @@ mod tests {
         let mut game = Game::new();
         game.add_roll(4);
         speculoos::assert_that(&game.strike()).is_false();
+    }
+    #[test]
+    fn initializes_sets_the_score_and_everytheng_to_zero() {
+        let mut game = Game::new();
+        game.add_roll(7);
+        game.add_roll(7);
+        game.add_roll(7);
+        game.initialize();
+        speculoos::assert_that(&game.score()).is_equal_to(0);
     }
 }

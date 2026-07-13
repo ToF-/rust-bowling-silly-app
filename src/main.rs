@@ -44,6 +44,9 @@ pub(crate) async fn change(
 ) -> impl Responder {
     let mut game = state.game.lock().unwrap();
     match form.action.as_str() {
+        "*" => { 
+            game.initialize();
+        }
         "/" => {
             game.spare();
         }
@@ -107,6 +110,7 @@ mod tests {
     use crate::test_fixtures::app::init_app;
     use actix_web::Error;
     use actix_web::dev::ServiceResponse;
+    use scraper::{Html, Selector};
 
     #[actix_web::test]
     async fn test_app_displays_the_word_score() {
@@ -139,7 +143,7 @@ mod tests {
         assert_that(&body).contains("0");
     }
 
-    async fn body_after_action<
+    async fn score_after_action<
         T: Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error>,
     >(
         service: T,
@@ -153,26 +157,28 @@ mod tests {
             .send_request(&service)
             .await;
         let request = test::TestRequest::default().to_request();
-        let body = test::call_and_read_body(&service, request)
-            .await
-            .escape_ascii()
-            .to_string();
-        body
+        let body = test::call_and_read_body(&service, request).await;
+        let html = String::from_utf8(body.to_vec()).unwrap();
+        let document = Html::parse_document(&html);
+        let selector = Selector::parse("#score").unwrap();
+        let div = document.select(&selector).next().unwrap();
+        div.text().collect::<String>()
     }
+
     #[actix_web::test]
     async fn test_buttons_increase_the_score() {
         let state = AppState {
             game: Mutex::new(Game::new()),
         };
         let service = test::init_service(init_app(state)).await;
-        let body = &body_after_action(&service, "1").await;
-        assert_that(body).contains("1");
-        let body = &body_after_action(&service, "3").await;
-        assert_that(body).contains("4");
-        let body = &body_after_action(&service, "5").await;
-        assert_that(body).contains("9");
-        let body = &body_after_action(&service, "3").await;
-        assert_that(body).contains("12");
+        let score = &score_after_action(&service, "1").await;
+        assert_that(score).contains("1");
+        let score = &score_after_action(&service, "3").await;
+        assert_that(score).contains("4");
+        let score = &score_after_action(&service, "5").await;
+        assert_that(score).contains("9");
+        let score = &score_after_action(&service, "3").await;
+        assert_that(score).contains("12");
     }
     #[actix_web::test]
     async fn test_spare_button_change_score_with_bonus() {
@@ -180,12 +186,12 @@ mod tests {
             game: Mutex::new(Game::new()),
         };
         let service = test::init_service(init_app(state)).await;
-        let body = &body_after_action(&service, "1").await;
-        assert_that(body).contains("1");
-        let body = &body_after_action(&service, "/").await;
-        assert_that(body).contains("10");
-        let body = &body_after_action(&service, "5").await;
-        assert_that(body).contains("20");
+        let score = &score_after_action(&service, "1").await;
+        assert_that(score).contains("1");
+        let score = &score_after_action(&service, "/").await;
+        assert_that(score).contains("10");
+        let score = &score_after_action(&service, "5").await;
+        assert_that(score).contains("20");
     }
     #[actix_web::test]
     async fn test_strike_button_change_score_with_bonus() {
@@ -193,11 +199,11 @@ mod tests {
             game: Mutex::new(Game::new()),
         };
         let service = test::init_service(init_app(state)).await;
-        let body = &body_after_action(&service, "X").await;
-        assert_that(body).contains("10");
-        let body = &body_after_action(&service, "5").await;
-        let body = &body_after_action(&service, "4").await;
-        assert_that(body).contains("28");
+        let score = &score_after_action(&service, "X").await;
+        assert_that(score).contains("10");
+        let score = &score_after_action(&service, "5").await;
+        let score = &score_after_action(&service, "4").await;
+        assert_that(score).contains("28");
     }
     #[actix_web::test]
     async fn test_spare_button_cant_change_score_on_new_frame() {
@@ -205,8 +211,8 @@ mod tests {
             game: Mutex::new(Game::new()),
         };
         let service = test::init_service(init_app(state)).await;
-        let body = &body_after_action(&service, "/").await;
-        assert_that(body).contains("0");
+        let score = &score_after_action(&service, "/").await;
+        assert_that(score).contains("0");
     }
     #[actix_web::test]
     async fn test_strike_button_cant_change_score_on_new_frame() {
@@ -214,8 +220,24 @@ mod tests {
             game: Mutex::new(Game::new()),
         };
         let service = test::init_service(init_app(state)).await;
-        let body = &body_after_action(&service, "3").await;
-        let body = &body_after_action(&service, "X").await;
-        assert_that(body).contains("3");
+        let score = &score_after_action(&service, "3").await;
+        let score = &score_after_action(&service, "X").await;
+        assert_that(score).contains("3");
+    }
+    #[actix_web::test]
+    async fn test_star_button_renitialize_the_score() {
+        let state = AppState {
+            game: Mutex::new(Game::new()),
+        };
+        let service = test::init_service(init_app(state)).await;
+        let score = &score_after_action(&service, "2").await;
+        let score = &score_after_action(&service, "7").await;
+        let score = &score_after_action(&service, "2").await;
+        let score = &score_after_action(&service, "7").await;
+        let score = &score_after_action(&service, "2").await;
+        let score = &score_after_action(&service, "7").await;
+        assert_that(score).contains("27");
+        let score = &score_after_action(&service, "*").await;
+        assert_that(score).contains("0");
     }
 }
