@@ -230,14 +230,24 @@ mod tests {
             game: Mutex::new(Game::new()),
         };
         let service = test::init_service(init_app(state)).await;
-        let score = &score_after_action(&service, "2").await;
-        let score = &score_after_action(&service, "7").await;
-        let score = &score_after_action(&service, "2").await;
-        let score = &score_after_action(&service, "7").await;
-        let score = &score_after_action(&service, "2").await;
+        let _ = &score_after_action(&service, "2").await;
+        let _ = &score_after_action(&service, "7").await;
+        let _ = &score_after_action(&service, "2").await;
+        let _ = &score_after_action(&service, "7").await;
+        let _ = &score_after_action(&service, "2").await;
         let score = &score_after_action(&service, "7").await;
         assert_that(score).contains("27");
         let score = &score_after_action(&service, "*").await;
         assert_that(score).contains("0");
+    }
+    #[actix_web::test]
+    async fn test_action_cant_add_roll_exceeding_ten() {
+        let state = AppState {
+            game: Mutex::new(Game::new()),
+        };
+        let service = test::init_service(init_app(state)).await;
+        let _ = &score_after_action(&service, "7").await;
+        let score = &score_after_action(&service, "7").await;
+        assert_that(score).contains("7");
     }
 }

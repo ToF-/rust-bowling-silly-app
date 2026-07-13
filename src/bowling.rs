@@ -15,7 +15,14 @@ impl Game {
         self.score
     }
 
-    pub fn add_roll(&mut self, roll: usize) {
+    pub fn add_roll(&mut self, roll: usize) -> bool {
+        if self.frames < 10 {
+            if let Some(last) = self.last_roll {
+                if last + roll > 10 {
+                    return false
+                }
+            }
+        };
         self.score += roll * self.bonus;
         self.bonus = self.next_bonus;
         self.next_bonus = 0;
@@ -39,8 +46,9 @@ impl Game {
                     self.frames += 1;
                 }
             }
-            self.score += roll
-        }
+            self.score += roll;
+        };
+        true
     }
 
     pub fn spare(&mut self) -> bool {
@@ -153,5 +161,14 @@ mod tests {
         game.add_roll(7);
         game.initialize();
         speculoos::assert_that(&game.score()).is_equal_to(0);
+    }
+    #[test]
+    fn add_roll_cant_make_a_frame_score_higher_than_ten() {
+        let mut game = Game::new();
+        game.add_roll(7);
+        speculoos::assert_that(&game.add_roll(7)).is_false();
+        speculoos::assert_that(&game.add_roll(2)).is_true();
+
+
     }
 }

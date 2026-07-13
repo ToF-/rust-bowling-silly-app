@@ -10,7 +10,8 @@ HomePage	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^pub struct HomeP
 add_a_spare_scores_a_bonus	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn add_a_spare_scores_a_bonus() {$/;"	f
 add_a_strike_scores_two_boni	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn add_a_strike_scores_two_boni() {$/;"	f
 add_average_roll_scores_average	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn add_average_roll_scores_average() {$/;"	f
-add_roll	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    pub fn add_roll(&mut self, roll: usize) {$/;"	f
+add_roll	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    pub fn add_roll(&mut self, roll: usize) -> bool {$/;"	f
+add_roll_cant_make_a_frame_score_higher_than_ten	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn add_roll_cant_make_a_frame_score_higher_than_ten() {$/;"	f
 complete_a_spare_cant_change_the_score_on_new_frame	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn complete_a_spare_cant_change_the_score_on_new_frame() {$/;"	f
 complete_a_spare_change_the_score	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn complete_a_spare_change_the_score() {$/;"	f
 init_game_puts_score_to_zero	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn init_game_puts_score_to_zero() {$/;"	f
@@ -25,6 +26,7 @@ spare	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    pub fn spare
 strike	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    pub fn strike(&mut self) -> bool {$/;"	f
 strike_cant_change_the_score_on_half_frame	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn strike_cant_change_the_score_on_half_frame() {$/;"	f
 strike_change_the_score	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn strike_change_the_score() {$/;"	f
+test_action_cant_add_roll_exceeding_ten	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_action_cant_add_roll_exceeding_ten() {$/;"	f
 test_app_displays_a_score	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_a_score() {$/;"	f
 test_app_displays_the_word_score	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_the_word_score() {$/;"	f
 test_buttons_increase_the_score	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_buttons_increase_the_score() {$/;"	f
