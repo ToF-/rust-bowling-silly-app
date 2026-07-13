@@ -33,12 +33,15 @@ pub(crate) async fn home(state: web::Data<AppState>) -> impl Responder {
     }
 }
 
-#[derive(Serialize,Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct ChangeForm {
     action: String,
 }
 
-pub(crate) async fn change(form: web::Form<ChangeForm>, state: web::Data<AppState>) -> impl Responder {
+pub(crate) async fn change(
+    form: web::Form<ChangeForm>,
+    state: web::Data<AppState>,
+) -> impl Responder {
     let mut game = state.game.lock().unwrap();
     match form.action.as_str() {
         "/" => {
@@ -90,20 +93,20 @@ mod tests {
     use speculoos::assert_that;
     use speculoos::prelude::StrAssertions;
 
+    use actix_http::Request;
     use actix_http::body::MessageBody;
+    use actix_web::dev::Service;
     use actix_web::dev::ServiceFactory;
     use actix_web::dev::ServiceRequest;
-use actix_web::dev::Service;
-use actix_http::Request;
 
-    use actix_web::dev::ServiceResponse;
-    use actix_web::Error;
     use crate::AppState;
     use crate::ChangeForm;
     use crate::Mutex;
     use crate::bowling::Game;
-use crate::routes;
+    use crate::routes;
     use crate::test_fixtures::app::init_app;
+    use actix_web::Error;
+    use actix_web::dev::ServiceResponse;
 
     #[actix_web::test]
     async fn test_app_displays_the_word_score() {
@@ -136,12 +139,16 @@ use crate::routes;
         assert_that(&body).contains("0");
     }
 
-async fn body_after_action<T: Service<Request, Response=ServiceResponse::<impl MessageBody>, Error = Error>>(service: T,
-            action: &str) -> String {
+    async fn body_after_action<
+        T: Service<Request, Response = ServiceResponse<impl MessageBody>, Error = Error>,
+    >(
+        service: T,
+        action: &str,
+    ) -> String {
         test::TestRequest::post()
             .uri("/change")
             .set_form(ChangeForm {
-                action: action.to_string()
+                action: action.to_string(),
             })
             .send_request(&service)
             .await;
