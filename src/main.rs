@@ -45,7 +45,7 @@ pub(crate) async fn change(
     let mut game = state.game.lock().unwrap();
     match form.action.as_str() {
         "/" => {
-            game.add_roll(10);
+            game.spare();
         }
         "X" => {
             game.add_roll(10);
@@ -173,5 +173,49 @@ mod tests {
         assert_that(body).contains("9");
         let body = &body_after_action(&service, "3").await;
         assert_that(body).contains("12");
+    }
+    #[actix_web::test]
+    async fn test_spare_button_change_score_with_bonus() {
+        let state = AppState {
+            game: Mutex::new(Game::new()),
+        };
+        let service = test::init_service(init_app(state)).await;
+        let body = &body_after_action(&service, "1").await;
+        assert_that(body).contains("1");
+        let body = &body_after_action(&service, "/").await;
+        assert_that(body).contains("10");
+        let body = &body_after_action(&service, "5").await;
+        assert_that(body).contains("20");
+    }
+    #[actix_web::test]
+    async fn test_strike_button_change_score_with_bonus() {
+        let state = AppState {
+            game: Mutex::new(Game::new()),
+        };
+        let service = test::init_service(init_app(state)).await;
+        let body = &body_after_action(&service, "X").await;
+        assert_that(body).contains("10");
+        let body = &body_after_action(&service, "5").await;
+        let body = &body_after_action(&service, "4").await;
+        assert_that(body).contains("28");
+    }
+    #[actix_web::test]
+    async fn test_spare_button_cant_change_score_on_new_frame() {
+        let state = AppState {
+            game: Mutex::new(Game::new()),
+        };
+        let service = test::init_service(init_app(state)).await;
+        let body = &body_after_action(&service, "/").await;
+        assert_that(body).contains("0");
+    }
+    #[actix_web::test]
+    async fn test_strike_button_cant_change_score_on_new_frame() {
+        let state = AppState {
+            game: Mutex::new(Game::new()),
+        };
+        let service = test::init_service(init_app(state)).await;
+        let body = &body_after_action(&service, "3").await;
+        let body = &body_after_action(&service, "X").await;
+        assert_that(body).contains("3");
     }
 }

@@ -19,11 +19,15 @@ main	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^async fn main() -> s
 new	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    pub fn new() -> Self {$/;"	f
 routes	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^fn routes(service_config: &mut ServiceConfig) {$/;"	f
 score	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    pub fn score(&self) -> usize {$/;"	f
-spare	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn spare(&mut self) -> bool {$/;"	f
-strike	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn strike(&mut self) -> bool {$/;"	f
+spare	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    pub fn spare(&mut self) -> bool {$/;"	f
+strike	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    pub fn strike(&mut self) -> bool {$/;"	f
 strike_cant_change_the_score_on_half_frame	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn strike_cant_change_the_score_on_half_frame() {$/;"	f
 strike_change_the_score	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn strike_change_the_score() {$/;"	f
 test_app_displays_a_score	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_a_score() {$/;"	f
 test_app_displays_the_word_score	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_app_displays_the_word_score() {$/;"	f
 test_buttons_increase_the_score	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_buttons_increase_the_score() {$/;"	f
+test_spare_button_cant_change_score_on_new_frame	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_spare_button_cant_change_score_on_new_frame() {$/;"	f
+test_spare_button_change_score_with_bonus	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_spare_button_change_score_with_bonus() {$/;"	f
+test_strike_button_cant_change_score_on_new_frame	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_strike_button_cant_change_score_on_new_frame() {$/;"	f
+test_strike_button_change_score_with_bonus	/Users/tof/Coding/rust-bowling-silly-app/src/main.rs	/^    async fn test_strike_button_change_score_with_bonus() {$/;"	f
 twelve_strikes_scores_a_perfect	/Users/tof/Coding/rust-bowling-silly-app/src/bowling.rs	/^    fn twelve_strikes_scores_a_perfect() {$/;"	f

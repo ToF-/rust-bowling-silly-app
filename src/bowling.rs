@@ -43,7 +43,7 @@ impl Game {
         }
     }
 
-    fn spare(&mut self) -> bool {
+    pub fn spare(&mut self) -> bool {
         match self.last_roll {
             None => false,
             Some(last) => {
@@ -53,7 +53,7 @@ impl Game {
         }
     }
 
-    fn strike(&mut self) -> bool {
+    pub fn strike(&mut self) -> bool {
         match self.last_roll {
             None => {
                 self.add_roll(10);
